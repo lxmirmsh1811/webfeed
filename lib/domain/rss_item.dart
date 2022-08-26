@@ -7,6 +7,7 @@ import 'package:webfeed/domain/rss_enclosure.dart';
 import 'package:webfeed/domain/rss_source.dart';
 import 'package:webfeed/util/datetime.dart';
 import 'package:webfeed/util/iterable.dart';
+import 'package:webfeed/util/xml.dart';
 import 'package:xml/xml.dart';
 
 class RssItem {
@@ -53,7 +54,9 @@ class RssItem {
           .map((e) => RssCategory.parse(e))
           .toList(),
       guid: element.findElements('guid').firstOrNull?.text,
-      pubDate: parseDateTime(element.findElements('pubDate').firstOrNull?.text),
+      pubDate: parseDateTime(
+          element.findElements('pubDate').firstOrNull?.text ??
+              findElements(element, 'a10:updated')?.firstOrNull?.text),
       author: element.findElements('author').firstOrNull?.text,
       comments: element.findElements('comments').firstOrNull?.text,
       source: element
